@@ -1,3 +1,3 @@
-import MyPlugin from "./plugin";
+import ObstoryPlugin from "./plugin";
 
-export default MyPlugin;
+export default ObstoryPlugin;

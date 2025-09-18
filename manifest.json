@@ -1,9 +1,9 @@
 {
 	"id": "obstory",
 	"name": "Obstory",
-	"version": "0.9.2",
+	"version": "0.9.3",
 	"minAppVersion": "1.9.5",
-	"description": "Obstory: AI suggestions and completion tools for organizing ideas, developing scripts, and writing compelling narratives in Obsidian.",
+	"description": "AI suggestions and completion tools for organizing ideas, developing scripts, and writing compelling narratives.",
 	"author": "takux",
 	"authorUrl": "https://github.com/takux",
 	"fundingUrl": "https://www.buymeacoffee.com/takux",

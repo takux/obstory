@@ -4,12 +4,12 @@ import { DEFAULT_SETTINGS } from "./constants";
 import { assembleRichContext } from "./contextAssembler";
 import { requestCompletion } from "./openaiClient";
 import { abortGhostInflight, createGhostExtension } from "./ghost";
-import { MySettingTab } from "./settingTab";
+import { ObstorySettingTab } from "./settingTab";
 import { detectFormat, buildCommonInstructions, sanitizeInline, stripLeftOverlap } from "./format";
 import { VaultIndex } from "./vaultIndex";
 import type { AssembledContext, ObstorySettings } from "./types";
 
-export default class MyPlugin extends Plugin {
+export default class ObstoryPlugin extends Plugin {
   settings: ObstorySettings;
   private vaultIndex!: VaultIndex;
 
@@ -39,7 +39,7 @@ export default class MyPlugin extends Plugin {
       }
     });
 
-    this.addSettingTab(new MySettingTab(this.app, this));
+    this.addSettingTab(new ObstorySettingTab(this.app, this));
 
     this.registerEditorExtension(
       createGhostExtension({

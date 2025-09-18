@@ -1,11 +1,11 @@
 import { App, PluginSettingTab, Setting } from "obsidian";
-import type MyPlugin from "./plugin";
+import type ObstoryPlugin from "./plugin";
 import { DEFAULT_SETTINGS } from "./constants";
 import { OPENAI_CHAT_MODELS } from "./openaiModels";
 import type { ModelProvider } from "./types";
 
-export class MySettingTab extends PluginSettingTab {
-  constructor(app: App, private readonly plugin: MyPlugin) {
+export class ObstorySettingTab extends PluginSettingTab {
+  constructor(app: App, private readonly plugin: ObstoryPlugin) {
     super(app, plugin);
   }
 
