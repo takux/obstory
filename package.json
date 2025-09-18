@@ -1,7 +1,7 @@
 {
-    "name": "obstory",
-    "version": "1.0.0",
-    "description": "Obstory keeps screenplay drafting moving inside Obsidian.",
+	"name": "obstory",
+	"version": "0.9.1",
+	"description": "Obstory keeps screenplay drafting moving inside Obsidian.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
