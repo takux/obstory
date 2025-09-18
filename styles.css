@@ -1,0 +1,7 @@
+/* Ghost suggestion styling */
+.sa-ghost {
+  color: var(--text-muted);
+  opacity: 0.65;
+  pointer-events: none;
+  white-space: pre;
+}
