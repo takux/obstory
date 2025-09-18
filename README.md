@@ -16,6 +16,9 @@ Pause while typing to see inline ghost text. Accept with `Tab`, accept the next 
 - **Model & token limits** – pick any OpenAI chat model you can access and set max tokens for completions and ghost hints.
 - **Ghost suggestions** – toggle the feature or adjust how long the suggestions can be.
 
+## Privacy
+After you set an OpenAI API key, Obstory sends relevant note context to OpenAI in order to generate completions or ghost suggestions.
+
 ## Support
 
 Enjoying the plugin? [Buy me a coffee](https://www.buymeacoffee.com/takux).

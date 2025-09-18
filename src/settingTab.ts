@@ -48,7 +48,10 @@ export class MySettingTab extends PluginSettingTab {
     if (provider === "openai") {
       new Setting(containerEl)
         .setName("API key")
-        .setDesc("Enter your OpenAI API key. The value is saved locally in plain text, so use a secrets manager if you can.")
+        .setDesc(
+          "Enter your OpenAI API key. The value is saved locally in plain text, so use a secrets manager if you can. " +
+            "After you set a key, Obstory sends relevant note context to OpenAI in order to generate completions or ghost suggestions."
+        )
         .addText((text) => {
           text
             .setPlaceholder("sk-...")
