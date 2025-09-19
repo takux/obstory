@@ -11,6 +11,9 @@ Obstory keeps screenplay drafting moving inside Obsidian. Connect your OpenAI ac
 ## Ghost suggestions
 Pause while typing to see inline ghost text. Accept with `Tab`, accept the next chunk with `Alt + →` (Windows/Linux) or `Option + →` (macOS), or dismiss with `Esc`.
 
+### Mobile command setup
+On Obsidian Mobile, open `Settings` → `Toolbar` → `Add global command` → add `“Obstory: Accept Ghost Suggestion”` or `“Obstory:  Accept Next Ghost Word”` if you want those actions on the toolbar or gesture shortcuts.
+
 ## Settings
 - **Primary language** – bias responses toward your preferred language.
 - **Model & token limits** – pick any OpenAI chat model you can access and set max tokens for completions and ghost hints.

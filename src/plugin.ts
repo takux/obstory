@@ -1,9 +1,10 @@
 import { MarkdownView, Notice, Plugin, type Editor, type EditorPosition } from "obsidian";
+import type { EditorView } from "@codemirror/view";
 
 import { DEFAULT_SETTINGS } from "./constants";
 import { assembleRichContext } from "./contextAssembler";
 import { requestCompletion } from "./openaiClient";
-import { abortGhostInflight, createGhostExtension } from "./ghost";
+import { abortGhostInflight, createGhostExtension, acceptGhost, acceptGhostNextWord } from "./ghost";
 import { ObstorySettingTab } from "./settingTab";
 import { detectFormat, buildCommonInstructions, sanitizeInline, stripLeftOverlap } from "./format";
 import { VaultIndex } from "./vaultIndex";
@@ -17,24 +18,48 @@ export default class ObstoryPlugin extends Plugin {
     await this.loadSettings();
     this.vaultIndex = new VaultIndex(this.app, () => this.settings);
 
+    // this.addCommand({
+    //   id: "obstory-complete",
+    //   name: "Obstory: Complete Next Beat",
+    //   checkCallback: (checking) => {
+    //     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+    //     if (!view) return false;
+    //     if (!checking) this.completeNext(view.editor);
+    //     return true;
+    //   }
+    // });
+
+    // this.addCommand({
+    //   id: "obstory-rewrite-dialogue",
+    //   name: "Obstory: Polish Selection as Dialogue",
+    //   checkCallback: (checking) => {
+    //     const view = this.app.workspace.getActiveViewOfType(MarkdownView);
+    //     if (!view) return false;
+    //     if (!checking) this.rewriteDialogue(view.editor);
+    //     return true;
+    //   }
+    // });
+
     this.addCommand({
-      id: "obstory-complete",
-      name: "Obstory: Complete Next Beat",
+      id: "obstory-accept-ghost",
+      name: "Accept Ghost Suggestion",
+      icon: "indent-increase",
       checkCallback: (checking) => {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (!view) return false;
-        if (!checking) this.completeNext(view.editor);
+        if (!checking) this.acceptGhostFromCommand(view.editor);
         return true;
       }
     });
 
     this.addCommand({
-      id: "obstory-rewrite-dialogue",
-      name: "Obstory: Polish Selection as Dialogue",
+      id: "obstory-accept-ghost-chunk",
+      name: "Accept Next Ghost Chunk",
+      icon: "chevron-right",
       checkCallback: (checking) => {
         const view = this.app.workspace.getActiveViewOfType(MarkdownView);
         if (!view) return false;
-        if (!checking) this.rewriteDialogue(view.editor);
+        if (!checking) this.acceptGhostChunkFromCommand(view.editor);
         return true;
       }
     });
@@ -243,6 +268,36 @@ export default class ObstoryPlugin extends Plugin {
 
   async saveSettings() {
     await this.saveData(this.settings);
+  }
+
+  private acceptGhostFromCommand(editor: Editor): void {
+    this.runGhostCommand(editor, acceptGhost, "No ghost suggestion to accept yet");
+  }
+
+  private acceptGhostChunkFromCommand(editor: Editor): void {
+    this.runGhostCommand(editor, acceptGhostNextWord, "No more ghost text to add yet");
+  }
+
+  private runGhostCommand(editor: Editor, action: (view: EditorView) => boolean, emptyMessage: string): void {
+    if (!this.settings.enableGhost) {
+      new Notice("Ghost suggestions are disabled", 3000);
+      return;
+    }
+    if (!this.settings.apiKey) {
+      new Notice("Set your OpenAI API key to use ghost suggestions", 4000);
+      return;
+    }
+
+    const cm = (editor as any)?.cm as EditorView | undefined;
+    if (!cm) {
+      console.error("CM6 editor unavailable for ghost command");
+      new Notice("Ghost suggestions are not available in this editor", 3000);
+      return;
+    }
+
+    if (!action(cm)) {
+      new Notice(emptyMessage, 3000);
+    }
   }
 
 }
