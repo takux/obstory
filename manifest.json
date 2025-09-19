@@ -1,7 +1,7 @@
 {
 	"id": "obstory",
 	"name": "Obstory",
-	"version": "0.9.4",
+	"version": "0.9.5",
 	"minAppVersion": "1.9.5",
 	"description": "AI suggestions and completion tools for organizing ideas, developing scripts, and writing compelling narratives.",
 	"author": "takux",

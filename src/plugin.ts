@@ -288,7 +288,7 @@ export default class ObstoryPlugin extends Plugin {
       return;
     }
 
-    const cm = (editor as any)?.cm as EditorView | undefined;
+    const cm = (editor as Editor & { cm?: EditorView }).cm;
     if (!cm) {
       console.error("CM6 editor unavailable for ghost command");
       new Notice("Ghost suggestions are not available in this editor", 3000);

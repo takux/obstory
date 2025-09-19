@@ -93,8 +93,9 @@ export function acceptGhost(view: EditorView): boolean {
   if (!deco || deco.size === 0) return false;
   let text = "";
   deco.between(0, view.state.doc.length, (_from, _to, spec) => {
-    const widget = (spec as any).widget as GhostWidget;
-    if (widget?.text) text = widget.text;
+    const widget = spec.spec?.widget;
+    if (!(widget instanceof GhostWidget)) return false;
+    text = widget.text;
   });
   if (!text) return false;
   const pos = view.state.selection.main.head;
@@ -110,14 +111,17 @@ export function clearGhost(view: EditorView): boolean {
   return true;
 }
 
+
+
 export function acceptGhostNextWord(view: EditorView): boolean {
   abortGhostInflight();
   const deco = view.state.field(ghostField, false);
   if (!deco || deco.size === 0) return false;
   let text = "";
   deco.between(0, view.state.doc.length, (_from, _to, spec) => {
-    const widget = (spec as any).widget as GhostWidget;
-    if (widget?.text) text = widget.text;
+    const widget = spec.spec.widget;
+    if (!(widget instanceof GhostWidget)) return false;
+    text = widget.text;
   });
   if (!text) return false;
   const pos = view.state.selection.main.head;
@@ -192,8 +196,8 @@ class GhostController {
   private async generate(view: EditorView, settings: ObstorySettings): Promise<void> {
     this.timer = null;
     if ((settings.provider ?? "openai") !== "openai") return;
-    const markdownView = this.deps.app.workspace.getActiveViewOfType(MarkdownView) as any;
-    const editor: Editor | undefined = markdownView?.editor;
+    const markdownView = this.deps.app.workspace.getActiveViewOfType(MarkdownView);
+    const editor = markdownView?.editor;
     if (!editor) return;
     const rawHead = view.state.selection.main.head ?? 0;
     const head = Math.min(rawHead, view.state.doc.length);

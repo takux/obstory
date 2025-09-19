@@ -1,4 +1,5 @@
-import type { App, Editor, EditorPosition, TFile } from "obsidian";
+import type { App, Editor, EditorPosition } from "obsidian";
+import { TFile } from "obsidian";
 import type { ObstorySettings, AssembledContext, ListContext } from "./types";
 import { VaultIndex } from "./vaultIndex";
 
@@ -16,8 +17,9 @@ export async function assembleRichContext(
   const { app, settings, vaultIndex } = deps;
   const cursor = cursorOverride ?? editor.getCursor();
   const activeFile = app.workspace.getActiveFile();
-  const notePath = (activeFile as TFile | null)?.path ?? "";
-  const title = (activeFile as TFile | null)?.basename ?? "";
+  const currentNote = activeFile instanceof TFile ? activeFile : null;
+  const notePath = currentNote?.path ?? "";
+  const title = currentNote?.basename ?? "";
 
   const { headingChain, bounds } = getHeadingChainAndBounds(editor, cursor.line);
   const mode = detectSectionMode(editor, headingChain, cursor);
@@ -163,8 +165,8 @@ async function gatherLinkedPageContext(app: App, settings: ObstorySettings, note
   const out: string[] = [];
   for (const { path, fragment } of links.slice(0, MAX_FILES)) {
     try {
-      const file = app.metadataCache.getFirstLinkpathDest(path, notePath) as TFile | null;
-      if (!file) continue;
+      const file = app.metadataCache.getFirstLinkpathDest(path, notePath);
+      if (!(file instanceof TFile)) continue;
       if (file.extension?.toLowerCase() !== "md") continue;
       const txt = await app.vault.read(file);
       if (!txt) continue;
